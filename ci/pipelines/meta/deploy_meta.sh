@@ -255,6 +255,7 @@ driveToGreen $META_PIPELINE set-images-pipeline
 unpausePipeline ${PIPELINE_PREFIX}images
 driveToGreen ${PIPELINE_PREFIX}images build-google-geode-builder
 driveToGreen ${PIPELINE_PREFIX}images build-google-windows-geode-builder
+triggerJob ${META_PIPELINE} set-pipeline
 driveToGreen $META_PIPELINE set-pipeline
 unpausePipeline ${PIPELINE_PREFIX}main
 echo "Successfully deployed ${CONCOURSE_URL}/teams/main/pipelines/${PIPELINE_PREFIX}main"
