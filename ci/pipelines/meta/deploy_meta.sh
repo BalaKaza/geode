@@ -218,14 +218,11 @@ function driveToGreen {
     unpauseJob ${PIPELINE} ${JOB}
     status=$(jobStatus ${PIPELINE} ${JOB})
   fi
-  if [ "aborted" = "$status" ] || [ "failed" = "$status" ] || [ "errored" = "$status" ] ; then
+  if [ "succeeded" = "$status" ] || [ "aborted" = "$status" ] || [ "failed" = "$status" ] || [ "errored" = "$status" ] ; then
     triggerJob ${PIPELINE} ${JOB}
     awaitJob ${PIPELINE} ${JOB}
   elif [ "n/a" = "$status" ] || [ "pending" = "$status" ] || [ "started" = "$status" ] ; then
     awaitJob ${PIPELINE} ${JOB}
-  elif [ "succeeded" = "$status" ] ; then
-    echo "${JOB} $status"
-    return 0
   else
     echo "Unrecognized job status for ${PIPELINE}/${JOB}: $status"
     exit 1
@@ -255,7 +252,6 @@ driveToGreen $META_PIPELINE set-images-pipeline
 unpausePipeline ${PIPELINE_PREFIX}images
 driveToGreen ${PIPELINE_PREFIX}images build-google-geode-builder
 driveToGreen ${PIPELINE_PREFIX}images build-google-windows-geode-builder
-triggerJob ${META_PIPELINE} set-pipeline
 driveToGreen $META_PIPELINE set-pipeline
 unpausePipeline ${PIPELINE_PREFIX}main
 echo "Successfully deployed ${CONCOURSE_URL}/teams/main/pipelines/${PIPELINE_PREFIX}main"
