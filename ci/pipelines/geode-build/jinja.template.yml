@@ -239,9 +239,33 @@ jobs:
   plan:
   - get: geode-build-version
     params: { bump: {{ semverPiece }} }
-  - put: geode-build-version
-    params:
-      file: geode-build-version/number
+    - get: alpine-tools-image
+    - task: bump-initial-version
+      image: alpine-tools-image
+      config:
+        platform: linux
+        inputs:
+        - name: geode-build-version
+        outputs:
+        - name: geode-build-version
+        params:
+          INITIAL_MINOR_VERSION_BUMP: ((semver-prerelease-token))-0
+        run:
+          path: sh
+          args:
+            - -exc
+            - |-
+              BASE_DIR=pwd
+              cat geode-build-version/version
+              appendedVersion=$(cat gemfire-build-version/version)-${INITIAL_MINOR_VERSION_BUMP}
+              cd gemfire-build-version
+                mv version old_version
+                touch version
+                echo ${appendedVersion} > version
+              cd ..
+    - put: geode-build-version
+      params:
+        file: geode-build-version/version
 {% endfor %}
 - name: {{build_test.name}}
   public: true
@@ -297,7 +321,7 @@ jobs:
   - aggregate:
     - put: geode-build-version
       params:
-        file: geode-build-version/number
+        file: geode-build-version/version
     - task: rsync_code_up
       image: alpine-tools-image
       config:
@@ -424,7 +448,7 @@ jobs:
           pushd geode
             GEODE_SHA=$(git rev-parse HEAD)
           popd
-          GEODE_SEMVER=$(cat geode-build-version/number)
+          GEODE_SEMVER=$(cat geode-build-version/version)
 
           GS_PATH=gs://((artifact-bucket))/semvers/((pipeline-prefix))((geode-build-branch))/passing-build-tokens.json
           CURRENT_PASSING_SHA=$(gsutil cat ${GS_PATH} | jq -r .ref)
