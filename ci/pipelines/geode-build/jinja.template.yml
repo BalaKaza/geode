@@ -239,30 +239,30 @@ jobs:
   plan:
   - get: geode-build-version
     params: { bump: {{ semverPiece }} }
-    - get: alpine-tools-image
-    - task: bump-initial-version
-      image: alpine-tools-image
-      config:
-        platform: linux
-        inputs:
-        - name: geode-build-version
-        outputs:
-        - name: geode-build-version
-        params:
-          INITIAL_MINOR_VERSION_BUMP: ((semver-prerelease-token))-0
-        run:
-          path: sh
-          args:
-            - -exc
-            - |-
-              BASE_DIR=pwd
-              cat geode-build-version/version
-              appendedVersion=$(cat gemfire-build-version/version)-${INITIAL_MINOR_VERSION_BUMP}
-              cd gemfire-build-version
-                mv version old_version
-                touch version
-                echo ${appendedVersion} > version
-              cd ..
+  - get: alpine-tools-image
+  - task: bump-initial-version
+    image: alpine-tools-image
+    config:
+      platform: linux
+      inputs:
+      - name: geode-build-version
+      outputs:
+      - name: geode-build-version
+      params:
+        INITIAL_MINOR_VERSION_BUMP: ((semver-prerelease-token))-0
+      run:
+        path: sh
+        args:
+          - -exc
+          - |-
+            BASE_DIR=pwd
+            cat geode-build-version/version
+            appendedVersion=$(cat gemfire-build-version/version)-${INITIAL_MINOR_VERSION_BUMP}
+            cd gemfire-build-version
+              mv version old_version
+              touch version
+              echo ${appendedVersion} > version
+            cd ..
     - put: geode-build-version
       params:
         file: geode-build-version/version
