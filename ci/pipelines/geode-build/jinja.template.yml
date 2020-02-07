@@ -260,7 +260,6 @@ jobs:
             appendedVersion=$(cat gemfire-build-version/number)-${INITIAL_MINOR_VERSION_BUMP}
             cd gemfire-build-version
               mv number old_number
-              touch number
               echo ${appendedVersion} > number
             cd ..
     - put: geode-build-version
