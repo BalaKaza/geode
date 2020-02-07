@@ -256,16 +256,16 @@ jobs:
           - -exc
           - |-
             BASE_DIR=pwd
-            cat geode-build-version/version
-            appendedVersion=$(cat gemfire-build-version/version)-${INITIAL_MINOR_VERSION_BUMP}
+            cat geode-build-version/number
+            appendedVersion=$(cat gemfire-build-version/number)-${INITIAL_MINOR_VERSION_BUMP}
             cd gemfire-build-version
               mv version old_version
-              touch version
-              echo ${appendedVersion} > version
+              touch number
+              echo ${appendedVersion} > number
             cd ..
     - put: geode-build-version
       params:
-        file: geode-build-version/version
+        file: geode-build-version/number
 {% endfor %}
 - name: {{build_test.name}}
   public: true
@@ -321,7 +321,7 @@ jobs:
   - aggregate:
     - put: geode-build-version
       params:
-        file: geode-build-version/version
+        file: geode-build-version/number
     - task: rsync_code_up
       image: alpine-tools-image
       config:
@@ -448,7 +448,7 @@ jobs:
           pushd geode
             GEODE_SHA=$(git rev-parse HEAD)
           popd
-          GEODE_SEMVER=$(cat geode-build-version/version)
+          GEODE_SEMVER=$(cat geode-build-version/number)
 
           GS_PATH=gs://((artifact-bucket))/semvers/((pipeline-prefix))((geode-build-branch))/passing-build-tokens.json
           CURRENT_PASSING_SHA=$(gsutil cat ${GS_PATH} | jq -r .ref)
