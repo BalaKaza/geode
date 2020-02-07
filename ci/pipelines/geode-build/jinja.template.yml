@@ -239,7 +239,7 @@ jobs:
   plan:
   - get: geode-build-version
     params: { bump: {{ semverPiece }} }
-  - get: alpine-tools-image
+  - get: alpine-tools-docker-image
   - task: bump-initial-version
     image: alpine-tools-image
     config:
@@ -259,7 +259,7 @@ jobs:
             cat geode-build-version/number
             appendedVersion=$(cat gemfire-build-version/number)-${INITIAL_MINOR_VERSION_BUMP}
             cd gemfire-build-version
-              mv version old_version
+              mv number old_number
               touch number
               echo ${appendedVersion} > number
             cd ..
