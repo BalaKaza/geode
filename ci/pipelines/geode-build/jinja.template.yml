@@ -238,7 +238,7 @@ jobs:
   serial: true
   plan:
   - get: geode-build-version
-    params: { bump: {{ semverPiece }}, pre: ((semver-prerelease-token)) }
+    params: { bump: {{ semverPiece }}, pre: ((semver-prerelease-token)), pre_without_version: true}
 #  - get: alpine-tools-docker-image
 #  - task: bump-initial-version
 #    image: alpine-tools-docker-image
