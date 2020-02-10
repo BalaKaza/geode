@@ -259,8 +259,8 @@ jobs:
             cat geode-build-version/number
             appendedVersion=$(cat gemfire-build-version/number)-${INITIAL_MINOR_VERSION_BUMP}
             cd gemfire-build-version
-              mv number old_number
-              echo ${appendedVersion} > number
+            mv number old_number
+            echo ${appendedVersion} > number
             cd ..
     - put: geode-build-version
       params:
