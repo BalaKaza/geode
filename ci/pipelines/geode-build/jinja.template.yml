@@ -238,33 +238,33 @@ jobs:
   serial: true
   plan:
   - get: geode-build-version
-    params: { bump: {{ semverPiece }} }
-  - get: alpine-tools-docker-image
-  - task: bump-initial-version
-    image: alpine-tools-docker-image
-    config:
-      platform: linux
-      inputs:
-      - name: geode-build-version
-      outputs:
-      - name: geode-build-version
-      params:
-        INITIAL_MINOR_VERSION_BUMP: ((semver-prerelease-token))-0
-      run:
-        path: sh
-        args:
-          - -exc
-          - |-
-            BASE_DIR=pwd
-            cat geode-build-version/number
-            appendedVersion=$(cat gemfire-build-version/number)-${INITIAL_MINOR_VERSION_BUMP}
-            cd gemfire-build-version
-            mv number old_number
-            echo ${appendedVersion} > number
-            cd ..
-    - put: geode-build-version
-      params:
-        file: geode-build-version/number
+    params: { bump: {{ semverPiece }}, pre: ((semver-prerelease-token)) }
+#  - get: alpine-tools-docker-image
+#  - task: bump-initial-version
+#    image: alpine-tools-docker-image
+#    config:
+#      platform: linux
+#      inputs:
+#      - name: geode-build-version
+#      outputs:
+#      - name: geode-build-version
+#      params:
+#        INITIAL_MINOR_VERSION_BUMP: ((semver-prerelease-token))-0
+#      run:
+#        path: sh
+#        args:
+#          - -exc
+#          - |-
+#            BASE_DIR=pwd
+#            cat geode-build-version/number
+#            appendedVersion=$(cat gemfire-build-version/number)-${INITIAL_MINOR_VERSION_BUMP}
+#            cd gemfire-build-version
+#            mv number old_number
+#            echo ${appendedVersion} > number
+#            cd ..
+  - put: geode-build-version
+    params:
+      file: geode-build-version/number
 {% endfor %}
 - name: {{build_test.name}}
   public: true
