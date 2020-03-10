@@ -163,18 +163,18 @@ jobs:
       {%- endif %}
       run:
         path: bash
-          args:
-            - -exc
-            - |-
-              BASE_DIR=$(pwd)
-              pushd geode
-               GEODE_REF=$(git rev-parse $GEODE_BRANCH)
-              popd geode
-              curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
-              chmod +x fly
-              TARGET_NAME=concourse
-              ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
-              ./fly -t ${TARGET_NAME} pin-resource --resource $PIPELINE_PREFIXmass-test-run/geode --version ref:$GEODE_REF
+        args:
+          - -exc
+          - |-
+            BASE_DIR=$(pwd)
+            pushd geode
+             GEODE_REF=$(git rev-parse $GEODE_BRANCH)
+            popd geode
+            curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
+            chmod +x fly
+            TARGET_NAME=concourse
+            ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
+            ./fly -t ${TARGET_NAME} pin-resource --resource $PIPELINE_PREFIXmass-test-run/geode --version ref:$GEODE_REF
 
 
 - name: TriggerMassRun
@@ -199,7 +199,7 @@ jobs:
         CONCOURSE_PASSWORD: ((concourse-password))
       {%- endif %}
       run:
-      path: bash
+        path: bash
         args:
           - -exc
           - |-
