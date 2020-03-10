@@ -224,16 +224,15 @@ jobs:
   public: true
   plan:
   - do:
-      - get: geode-ci
-        passed: [Build]
-      - aggregate:
-          - get: geode
-            passed: [PinGeode]
-          - get: geode-build-version
-            passed: [Build]
-      - put: concourse-metadata-resource
-      - get: alpine-tools-image
-      - get: {{ test.PLATFORM}}-builder-image-family
+    - get: geode-ci
+      passed: [Build]
+    - get: geode
+      passed: [PinGeode]
+    - get: geode-build-version
+      passed: [Build]
+    - put: concourse-metadata-resource
+    - get: alpine-tools-image
+    - get: {{ test.PLATFORM}}-builder-image-family
     - do:
       {{ init_retry()|indent(6) }}
       - task: create_instance-{{java_test_version.name}}
