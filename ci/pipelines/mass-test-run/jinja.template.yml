@@ -215,7 +215,7 @@ jobs:
 {%- for test in tests if test.name=="Distributed" %}
   {%- set parameters = {} %}
   {%- do deep_merge(parameters, test) %}
-  {%- for java_test_version in (java_test_versions) %}
+  {%- for java_test_version in (java_test_versions) if java_test_version.version=="8" %}
     {%- if java_test_version.override is defined and java_test_version.override[test.name] is defined %}
       {%- do deep_merge(parameters, java_test_version.override[test.name]) %}
     {%- endif %}
