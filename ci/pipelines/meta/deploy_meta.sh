@@ -275,10 +275,9 @@ driveToGreen ${PIPELINE_PREFIX}images build-google-geode-builder
 driveToGreen ${PIPELINE_PREFIX}images build-google-windows-geode-builder
 driveToGreen $META_PIPELINE set-pipeline
 unpausePipeline ${PIPELINE_PREFIX}main
-unpausePipeline ${PIPELINE_PREFIX}mass-test-run
 
 if [[ "$GEODE_FORK" == "${UPSTREAM_FORK}" ]]; then
-  exposePipelines ${PIPELINE_PREFIX}main ${PIPELINE_PREFIX}images ${PIPELINE_PREFIX}mass-test-run
+  exposePipelines ${PIPELINE_PREFIX}main ${PIPELINE_PREFIX}images
   if [[ "${PUBLIC}" == "true" ]]; then
     enableFeature metrics
     enableFeature examples

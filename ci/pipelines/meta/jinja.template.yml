@@ -393,7 +393,7 @@ jobs:
           GCP_PROJECT: ((gcp-project))
           PUBLIC_PIPELINES: ((public-pipelines))
         run:
-          path: geode-mass-test-run-pipeline/ci/pipelines/reaper/deploy_pipeline.sh
+          path: geode-mass-test-run-pipeline/ci/pipelines/mass-test-run/deploy_pipeline.sh
     - put: concourse
       params:
         pipelines:
