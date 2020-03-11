@@ -169,12 +169,10 @@ jobs:
   public: true
   plan:
   - do:
-    - get: geode-ci
-      passed: [PinGeode]
     - get: geode
       passed: [PinGeode]
     - get: geode-build-version
-      passed: [PinGeode]
+    - get: geode-ci
     - put: concourse-metadata-resource
     - get: alpine-tools-image
     - get: linux-builder-image-family
