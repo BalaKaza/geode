@@ -83,6 +83,8 @@ gcp-project: ${GCP_PROJECT}
 artifact-bucket: ${ARTIFACT_BUCKET}
 gradle-global-args: ${GRADLE_GLOBAL_ARGS}
 semver-prerelease-token: ${SEMVER_PRERELEASE_TOKEN}
+concourse-url: ${CONCOURSE_URL}
+concourse-team: ${CONCOURSE_TEAM}
 YML
 
 
