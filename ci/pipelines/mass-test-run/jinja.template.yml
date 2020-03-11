@@ -29,10 +29,11 @@ groups:
     - TriggerMassRun
 
 resources:
-#- name: weekly
-#  type: time
-#  source:
+- name: weekly
+  type: time
+  source:
 #    interval: 168h
+    interval: 10m
 - name: concourse-metadata-resource
   type: concourse-metadata-resource
   source: {}
@@ -94,8 +95,8 @@ jobs:
   max_in_flight: 1
   public: true
   plan:
-#  - get: weekly
-#    trigger: true
+  - get: weekly
+    trigger: true
   - get: geode
   - get: alpine-tools-image
   - task: pin-geode-resource
@@ -138,8 +139,9 @@ jobs:
   max_in_flight: 1
   public: true
   plan:
-#  - get: weekly
-#    trigger: true
+  - get: geode
+    trigger: true
+    passed: [PinGeode]
   - get: alpine-tools-image
   - task: run-distributed-test-N-times
     image: alpine-tools-image
