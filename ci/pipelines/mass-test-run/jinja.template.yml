@@ -180,7 +180,6 @@ jobs:
   plan:
   - do:
     - get: geode
-      passed: [PinGeode]
     - get: geode-build-version
     - get: geode-ci
     - put: concourse-metadata-resource
