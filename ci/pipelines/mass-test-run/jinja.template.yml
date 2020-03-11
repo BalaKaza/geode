@@ -124,13 +124,14 @@ jobs:
           - |-
             BASE_DIR=$(pwd)
             pushd geode
+             git checkout $GEODE_BRANCH
              GEODE_REF=$(git rev-parse $GEODE_BRANCH)
-            popd geode
+            popd
             curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
             chmod +x fly
             TARGET_NAME=concourse
             ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
-            ./fly -t ${TARGET_NAME} pin-resource --resource $PIPELINE_PREFIXmass-test-run/geode --version ref:$GEODE_REF
+            ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode --version ref:$GEODE_REF
 
 
 - name: TriggerMassRun
