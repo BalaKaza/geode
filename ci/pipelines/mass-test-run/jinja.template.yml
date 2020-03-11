@@ -40,10 +40,6 @@ resources:
   type: git
   source:
     branch: ((geode-build-branch))
-    ignore_paths:
-    - ci/*
-    - dev-tools/release/*
-    - "*.md"
     {{ github_access() | indent(4) }}
 - name: geode-ci
   type: git
@@ -127,8 +123,9 @@ jobs:
           - |-
             BASE_DIR=$(pwd)
             pushd geode
-             git checkout $GEODE_BRANCH
-             GEODE_REF=$(git rev-parse $GEODE_BRANCH)
+             git checkout ${GEODE_BRANCH}
+             git pull
+             GEODE_REF=$(git rev-parse ${GEODE_BRANCH})
             popd
             curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
             chmod +x fly
