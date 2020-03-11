@@ -301,5 +301,3 @@ jobs:
                   - name: instance-data-OpenJDK8
                     path: instance-data
                 timeout: 1h
-{% endfor -%}
-{% endfor -%}
