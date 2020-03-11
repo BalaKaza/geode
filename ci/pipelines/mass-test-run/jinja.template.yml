@@ -139,11 +139,9 @@ jobs:
   max_in_flight: 1
   public: true
   plan:
-  - get: geode
-    trigger: true
-    passed: [PinGeode]
   - get: weekly
     trigger: true
+    passed: [PinGeode]
   - get: alpine-tools-image
   - task: run-distributed-test-N-times
     image: alpine-tools-image
