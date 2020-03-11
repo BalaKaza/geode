@@ -164,13 +164,6 @@ jobs:
               ./fly -t ${TARGET_NAME} trigger-job -j $PIPELINE_PREFIXmass-test-run/DistributedTestOpenJDK8
             done
 
-{%- for test in tests if test.name=="Distributed" %}
-  {%- set parameters = {} %}
-  {%- do deep_merge(parameters, test) %}
-  {%- for java_test_version in (java_test_versions) if java_test_version.version=="8" %}
-    {%- if java_test_version.override is defined and java_test_version.override[test.name] is defined %}
-      {%- do deep_merge(parameters, java_test_version.override[test.name]) %}
-    {%- endif %}
 - name: DistributedTestOpenJDK8
   max_in_flight: 5
   public: true
