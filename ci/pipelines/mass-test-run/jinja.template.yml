@@ -106,6 +106,8 @@ jobs:
     image: alpine-tools-image
     config:
       platform: linux
+      inputs:
+      - name: geode
       params:
         CONCOURSE_URL: ((concourse-url))
         CONCOURSE_TEAM: ((concourse-team))
