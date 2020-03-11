@@ -142,6 +142,8 @@ jobs:
   - get: geode
     trigger: true
     passed: [PinGeode]
+  - get: weekly
+    trigger: true
   - get: alpine-tools-image
   - task: run-distributed-test-N-times
     image: alpine-tools-image
