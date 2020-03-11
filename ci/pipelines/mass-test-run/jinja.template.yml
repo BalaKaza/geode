@@ -109,8 +109,11 @@ jobs:
       inputs:
       - name: geode
       params:
-        CONCOURSE_URL: ((concourse-url))
-        CONCOURSE_TEAM: ((concourse-team))
+        # TODO: Need to figure out why the changes does not work.
+#        CONCOURSE_URL: ((concourse-url))
+#        CONCOURSE_TEAM: ((concourse-team))
+        CONCOURSE_URL: 'https://concourse.gemfire-ci.info'
+        CONCOURSE_TEAM: 'developer'
         GEODE_BRANCH: ((geode-build-branch))
         PIPELINE_PREFIX: ((pipeline-prefix))
       {%- if repository.upstream_fork!="apache" %}
@@ -146,8 +149,11 @@ jobs:
     config:
       platform: linux
       params:
-        CONCOURSE_URL: ((concourse-url))
-        CONCOURSE_TEAM: ((concourse-team))
+        # TODO: Need to figure out why the changes does not work.
+        #        CONCOURSE_URL: ((concourse-url))
+        #        CONCOURSE_TEAM: ((concourse-team))
+        CONCOURSE_URL: 'https://concourse.gemfire-ci.info'
+        CONCOURSE_TEAM: 'developer'
         GEODE_BRANCH: ((geode-build-branch))
         PIPELINE_PREFIX: ((pipeline-prefix))
         MASS_RUN_NUMBER: 2
