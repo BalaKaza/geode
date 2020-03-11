@@ -101,6 +101,7 @@ jobs:
 #  - get: weekly
 #    trigger: true
   - get: geode
+  - get: alpine-tools-image
   - task: pin-geode-resource
     image: alpine-tools-image
     config:
@@ -136,7 +137,7 @@ jobs:
   plan:
 #  - get: weekly
 #    trigger: true
-#    passed: [PinGeode]
+  - get: alpine-tools-image
   - task: run-distributed-test-200-times
     image: alpine-tools-image
     config:
