@@ -56,7 +56,8 @@ resources:
 - name: geode-build-version
   type: semver
   source:
-    bucket: ((artifact-bucket))
+#    bucket: ((artifact-bucket))
+    bucket: roberts-cool-bucket
     driver: gcs
     initial_version: {{ metadata.initial_version }}
     json_key: ((!concourse-gcp-key))
