@@ -29,11 +29,11 @@
   - get: geode
     trigger: true
     passed:
-      - Build
+    - Build
   - get: geode-build-version
     trigger: true
     passed:
-      - Build
+    - Build
 {% endmacro %}
 
 {%- macro deep_merge(a, b): %}
@@ -86,7 +86,7 @@ GRADLE_GLOBAL_ARGS: ((gradle-global-args))
 
 {% macro all_gating_jobs() %}
   {%- for test in (tests) if test.name=="Distributed" -%}
-  {%- for java_test_version in (java_test_versions) if java_test_version.name=="OpenJDK8" %}
+  {%- for java_test_version in (java_test_versions) if java_test_version.name=="OpenJDK8" -%}
 - {{test.name}}Test{{java_test_version.name}}
   {%- endfor -%}
   {%- endfor -%}
@@ -95,8 +95,11 @@ GRADLE_GLOBAL_ARGS: ((gradle-global-args))
 groups:
 - name: main
   jobs:
-  - {{ build_test.name }}
-  {{- all_gating_jobs() | indent(2) }}
+  {%- for test in (tests) if not test.name=="Distributed" -%}
+    {%- for java_test_version in (java_test_versions) if java_test_version.name=="OpenJDK8" %}
+  - {{test.name}}Test{{java_test_version.name}}
+    {%- endfor -%}
+  {%- endfor %}
   - PinGeode
   - TriggerMassRun
 
