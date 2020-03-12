@@ -392,6 +392,10 @@ jobs:
           SANITIZED_GEODE_FORK: ((sanitized-geode-fork))
           GCP_PROJECT: ((gcp-project))
           PUBLIC_PIPELINES: ((public-pipelines))
+          CONCOURSE_URL: ((concourse-url))
+          CONCOURSE_HOST: ((concourse-host))
+          CONCOURSE_TEAM: ((concourse-team))
+          ARTIFACT_BUCKET: ((artifact-bucket))
         run:
           path: geode-mass-test-run-pipeline/ci/pipelines/mass-test-run/deploy_pipeline.sh
     - put: concourse

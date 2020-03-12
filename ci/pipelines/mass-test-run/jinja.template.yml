@@ -53,8 +53,7 @@ resources:
 - name: geode-build-version
   type: semver
   source:
-#    bucket: ((artifact-bucket))
-    bucket: roberts-cool-bucket
+    bucket: ((artifact-bucket))
     driver: gcs
     initial_version: {{ metadata.initial_version }}
     json_key: ((!concourse-gcp-key))
@@ -106,11 +105,8 @@ jobs:
       inputs:
       - name: geode
       params:
-        # TODO: Need to figure out why the changes does not work.
-#        CONCOURSE_URL: ((concourse-url))
-#        CONCOURSE_TEAM: ((concourse-team))
-        CONCOURSE_URL: 'https://concourse.gemfire-ci.info'
-        CONCOURSE_TEAM: 'developer'
+        CONCOURSE_URL: ((concourse-url))
+        CONCOURSE_TEAM: ((concourse-team))
         GEODE_BRANCH: ((geode-build-branch))
         PIPELINE_PREFIX: ((pipeline-prefix))
       {%- if repository.upstream_fork!="apache" %}
@@ -148,11 +144,8 @@ jobs:
     config:
       platform: linux
       params:
-        # TODO: Need to figure out why the changes does not work.
-        #        CONCOURSE_URL: ((concourse-url))
-        #        CONCOURSE_TEAM: ((concourse-team))
-        CONCOURSE_URL: 'https://concourse.gemfire-ci.info'
-        CONCOURSE_TEAM: 'developer'
+        CONCOURSE_URL: ((concourse-url))
+        CONCOURSE_TEAM: ((concourse-team))
         GEODE_BRANCH: ((geode-build-branch))
         PIPELINE_PREFIX: ((pipeline-prefix))
         MASS_RUN_NUMBER: 2
@@ -268,7 +261,7 @@ jobs:
                 path: geode-ci/ci/scripts/rsync_code_down.sh
               inputs:
               - name: geode-ci
-              - name: instance-data-{OpenJDK8
+              - name: instance-data-OpenJDK8
                 path: instance-data
               outputs:
               - name: geode-results-OpenJDK8
