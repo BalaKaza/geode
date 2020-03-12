@@ -168,50 +168,6 @@ resource_types:
     repository: frodenas/gcs-resource
 
 jobs:
-- name: PinGeode
-  max_in_flight: 1
-  plan:
-  - get: weekly
-    trigger: true
-  - get: geode
-  - get: geode-ci
-  - get: alpine-tools-image
-  - task: pin-geode-resource
-    image: alpine-tools-image
-    config:
-      platform: linux
-      inputs:
-      - name: geode
-      - name: geode-ci
-      params:
-        CONCOURSE_URL: ((concourse-url))
-        CONCOURSE_TEAM: ((concourse-team))
-        PIPELINE_PREFIX: ((pipeline-prefix))
-      {%- if repository.upstream_fork!="apache" %}
-        CONCOURSE_USERNAME: ((concourse-username))
-        CONCOURSE_PASSWORD: ((concourse-password))
-      {%- endif %}
-      run:
-        path: bash
-        args:
-        - -exc
-        - |
-          BASE_DIR=$(pwd)
-          pushd geode
-            GEODE_REF=$(git rev-parse HEAD)
-          popd
-          pushd geode-ci
-            GEODE_CI_REF=$(git rev-parse HEAD)
-          popd
-          curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
-          chmod +x fly
-          TARGET_NAME=concourse
-          set +x
-          ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
-          set -x
-          ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode --version ref:${GEODE_REF}
-          ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode-ci --version ref:${GEODE_CI_REF}
-
 - name: TriggerMassRun
   max_in_flight: 1
   plan:
@@ -376,3 +332,47 @@ jobs:
                 timeout: 1h
 {% endfor -%}
 {% endfor -%}
+
+- name: PinGeode
+  max_in_flight: 1
+  plan:
+  - get: weekly
+    trigger: true
+  - get: geode
+  - get: geode-ci
+  - get: alpine-tools-image
+  - task: pin-geode-resource
+    image: alpine-tools-image
+    config:
+      platform: linux
+      inputs:
+      - name: geode
+      - name: geode-ci
+      params:
+        CONCOURSE_URL: ((concourse-url))
+        CONCOURSE_TEAM: ((concourse-team))
+        PIPELINE_PREFIX: ((pipeline-prefix))
+      {%- if repository.upstream_fork!="apache" %}
+        CONCOURSE_USERNAME: ((concourse-username))
+        CONCOURSE_PASSWORD: ((concourse-password))
+      {%- endif %}
+      run:
+        path: bash
+        args:
+        - -exc
+        - |
+          BASE_DIR=$(pwd)
+          pushd geode
+            GEODE_REF=$(git rev-parse HEAD)
+          popd
+          pushd geode-ci
+            GEODE_CI_REF=$(git rev-parse HEAD)
+          popd
+          curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
+          chmod +x fly
+          TARGET_NAME=concourse
+          set +x
+          ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
+          set -x
+          ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode --version ref:${GEODE_REF}
+          ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode-ci --version ref:${GEODE_CI_REF}
