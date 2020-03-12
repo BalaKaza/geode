@@ -93,12 +93,12 @@ GRADLE_GLOBAL_ARGS: ((gradle-global-args))
 {% endmacro %}
 
 groups:
-  - name: main
-    jobs:
-    - {{ build_test.name }}
-    {{- all_gating_jobs() | indent(2) }}
-    - PinGeode
-    - TriggerMassRun
+- name: main
+  jobs:
+  - {{ build_test.name }}
+  {{- all_gating_jobs() | indent(2) }}
+  - PinGeode
+  - TriggerMassRun
 
 resources:
 - name: weekly
@@ -251,7 +251,7 @@ jobs:
       {%- do deep_merge(parameters, java_test_version.override[test.name]) %}
     {%- endif %}
 - name: {{test.name}}Test{{java_test_version.name}}
-  max_in_flight: {{parameters.MAX_IN_FLIGHT}}
+  max_in_flight: 5
   public: true
   plan:
   - do:
