@@ -96,7 +96,7 @@ groups:
 - name: main
   jobs:
   {%- for test in (tests) if not test.name=="Distributed" -%}
-    {%- for java_test_version in (java_test_versions) if java_test_version.name=="OpenJDK8" %}
+    {%- for java_test_version in (java_test_versions) if java_test_version.name=="OpenJDK8" -%}
   - {{test.name}}Test{{java_test_version.name}}
     {%- endfor -%}
   {%- endfor %}
@@ -247,7 +247,7 @@ jobs:
 {%- for test in tests if test.name=="Distributed" %}
   {%- set parameters = {} %}
   {%- do deep_merge(parameters, test) %}
-  {%- for java_test_version in (java_test_versions) if java_test_version.name="OpenJDK8" %}
+  {%- for java_test_version in (java_test_versions) if java_test_version.name="OpenJDK8" -%}
     {%- if java_test_version.override is defined and java_test_version.override[test.name] is defined %}
       {%- do deep_merge(parameters, java_test_version.override[test.name]) %}
     {%- endif %}
