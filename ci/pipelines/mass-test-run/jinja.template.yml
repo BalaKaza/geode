@@ -194,21 +194,23 @@ jobs:
       run:
         path: bash
         args:
-          - -exc
-          - |-
-            BASE_DIR=$(pwd)
-            pushd geode
-             GEODE_REF=$(git rev-parse HEAD)
-            popd
-            pushd geode-ci
-             GEODE_CI_REF=$(git rev-parse HEAD)
-            popd
-            curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
-            chmod +x fly
-            TARGET_NAME=concourse
-            ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
-            ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode --version ref:${GEODE_REF}
-            ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode-ci --version ref:${GEODE_CI_REF}
+        - -exc
+        - |
+          BASE_DIR=$(pwd)
+          pushd geode
+            GEODE_REF=$(git rev-parse HEAD)
+          popd
+          pushd geode-ci
+            GEODE_CI_REF=$(git rev-parse HEAD)
+          popd
+          curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
+          chmod +x fly
+          TARGET_NAME=concourse
+          set +x
+          ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
+          set -x
+          ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode --version ref:${GEODE_REF}
+          ./fly -t ${TARGET_NAME} pin-resource --resource ${PIPELINE_PREFIX}mass-test-run/geode-ci --version ref:${GEODE_CI_REF}
 
 - name: TriggerMassRun
   max_in_flight: 1
@@ -233,16 +235,16 @@ jobs:
       run:
         path: bash
         args:
-          - -exc
-          - |-
-            BASE_DIR=$(pwd)
-            curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
-            chmod +x fly
-            TARGET_NAME=concourse
-            ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
-            for t in $(seq ${MASS_RUN_NUMBER}); do
-              ./fly -t ${TARGET_NAME} trigger-job -j ${PIPELINE_PREFIX}mass-test-run/DistributedTestOpenJDK8
-            done
+        - -exc
+        - |
+          BASE_DIR=$(pwd)
+          curl "${CONCOURSE_URL}/api/v1/cli?arch=amd64&platform=linux" --output fly
+          chmod +x fly
+          TARGET_NAME=concourse
+          ./fly -t ${TARGET_NAME} login -c "${CONCOURSE_URL}" -n "${CONCOURSE_TEAM}" -u "${CONCOURSE_USERNAME}" -p "${CONCOURSE_PASSWORD}"
+          for t in $(seq ${MASS_RUN_NUMBER}); do
+            ./fly -t ${TARGET_NAME} trigger-job -j ${PIPELINE_PREFIX}mass-test-run/DistributedTestOpenJDK8
+          done
 
 {%- for test in tests if test.name=="Distributed" %}
   {%- set parameters = {} %}
